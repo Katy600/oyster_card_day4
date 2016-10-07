@@ -44,7 +44,7 @@ class Oystercard
   end
 
   def deduct(amount)
-    @balance - @current_journey.fare 
+    @balance = @balance - @current_journey.calculate_fare(amount)
   end
 
 private

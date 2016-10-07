@@ -24,8 +24,8 @@ class Journey
      !@exit_station.nil?
   end
 
-  def calculate_fare
-    (amount == :fare ? @current_journey.fare : @current_journey.penalty)
+  def calculate_fare(amount)
+    (amount == :fare ? fare : penalty)
   end
 
 end
