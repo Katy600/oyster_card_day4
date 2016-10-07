@@ -8,7 +8,7 @@ describe Oystercard do
     end
 
   let(:station) {double :station, name: "angel", zone: 1}
-  let(:bank) {double :bank, name: "bank", zone: 3}
+  let(:station2) {double :bank, name: "bank", zone: 3}
 
   context 'balance' do
     it 'have balance' do
@@ -36,26 +36,25 @@ describe Oystercard do
       expect{card.touch_in(station)}.to raise_error "Insufficient funds for journey"
     end
 
-    it 'touching out registers the card as no longer being in journey' do
-      card.touch_in(station)
-      card.touch_out(bank)
-      expect(card.in_use).to eq false
-    end
-
     it 'charges the card on touch out' do
       card.touch_in(station)
-      expect{card.touch_out(bank)}.to change{card.balance}.by(-3)
+      expect{card.touch_out(station2)}.to change{card.balance}.by(-3)
     end
 
-    it 'charges the card a penalty fare is you double touch in' do
+    it 'charges the card a penalty fare if you double touch in' do
       card.touch_in(station)
-      expect{card.touch_in(bank)}.to change{card.balance}.by(-6)
+      expect{card.touch_in(station2)}.to change{card.balance}.by(-6)
+    end
+
+    it 'charges the card a penalty fare if you double touch out' do
+      card.touch_out(station)
+      expect{card.touch_out(station2)}.to change{card.balance}.by(-6)
     end
 
     it 'adds a complete journey to the journey history' do
       card.touch_in(station)
-      card.touch_out(bank)
-      expect(card.history).to eq [[card.current_journey]]
+      card.touch_out(station2)
+      expect(card.history).to eq [card.current_journey]
     end
   end
 end

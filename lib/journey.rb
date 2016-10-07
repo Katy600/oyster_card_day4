@@ -21,8 +21,11 @@ class Journey
   end
 
   def complete?
-    complete = defined? @exit_station
-    complete != nil
+     !@exit_station.nil?
+  end
+
+  def calculate_fare
+    (amount == :fare ? @current_journey.fare : @current_journey.penalty)
   end
 
 end
