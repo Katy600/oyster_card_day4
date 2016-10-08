@@ -16,6 +16,10 @@ describe Oystercard do
     end
   end
 
+  it 'has a journey_log' do
+    expect(card).to respond_to :journey_log
+  end
+
   context '#top up' do
 
     it 'limits top up value MONEY_LIMIT' do
@@ -26,10 +30,12 @@ describe Oystercard do
 
   context 'touching in and out' do
 
-    it 'touching in registers a current journey' do
+    it 'touching in calls the start method in journey_log' do
+      expect(card.journey_log).to receive(:start)
       card.touch_in(station)
-      expect(card).to respond_to :current_journey
     end
+
+
 
     it 'raises error if card below minimum balance when touching in' do
       card.top_up(-Oystercard::MONEY_LIMIT)
